@@ -51,9 +51,9 @@ class RedisInfo < Scout::Plugin
         values[0].strip!
         values[1].strip!
         if values[0] =~ /.*_time$/
-          values[1] = Time.at(values[1]).strftime('%Y-%m-%d %H:%M:%S')
+          values[1] = Time.at(values[1].to_i).strftime('%Y-%m-%d %H:%M:%S')
         elsif values[0] =~ /.*_memory$/
-          values[1] = "#{as_mb(values[1])} MB"
+          values[1] = "#{as_mb(values[1])}"
         end
         stats["#{values[0]}"] = values[1]
       end
@@ -62,9 +62,21 @@ class RedisInfo < Scout::Plugin
     stats
   end
 
+  KILO = 1024.to_i
+  MEGA = (1024 * 1024).to_i
+  GIGA = (1024 * 1024 * 1024).to_i
+
   def as_mb(memory_string)
-    num = memory_string.to_f
-    num / (1024 * 1024).to_f
+    num = memory_string.to_i
+    if num < KILO
+      "#{num} B"
+    elsif num < MEGA
+      "#{num / KILO} KB"
+    elsif num < GIGA
+      "#{num / MEGA} MB"
+    else
+      "#{num / GIGA} GB"
+    end
   end
 
 end
