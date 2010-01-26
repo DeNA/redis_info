@@ -1,0 +1,4 @@
+Redis Info
+=======
+
+Provides a Scout plugin that queries a redis server using the info command to record information about the server.
