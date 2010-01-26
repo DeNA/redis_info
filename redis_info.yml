@@ -1,0 +1,5 @@
+options:
+  redis_info_command:
+    name: Redis info command
+    notes: Specify the system call to get the redis server information.
+    default: redis-cli info
